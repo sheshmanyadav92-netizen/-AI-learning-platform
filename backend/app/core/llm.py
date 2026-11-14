@@ -226,8 +226,26 @@ class LLMService:
         active_model = model.strip() if model else DEFAULT_MODELS.get(active_provider, "gpt-4o-mini")
 
         if not active_key or active_provider == "local":
+            gap_report = learner_context.get("gap_report") or {}
+            role_title = gap_report.get("role_title")
+            readiness = gap_report.get("readiness")
+            if role_title and readiness is not None:
+                cosine_fit = gap_report.get("cosine_fit")
+                fit_summary = (
+                    f" Your career fit score is {float(cosine_fit):.4f}."
+                    if cosine_fit is not None
+                    else ""
+                )
+                return (
+                    f"Your current career readiness for {role_title} is "
+                    f"{float(readiness):.2f}%.{fit_summary}\n\n"
+                    "This is a locally generated summary of your current learner profile. "
+                    "Configure an AI provider in Settings for conversational guidance."
+                )
+
             return (
                 "👋 **Welcome to your AI Academic Mentor!**\n\n"
+                "Your career readiness summary is available after choosing a career goal. "
                 "To activate live AI responses grounded in your personal LearnerState, "
                 "please open **Settings** (⚙️ in the left sidebar), select your preferred provider "
                 "(Groq, NVIDIA NIM, or OpenRouter), and enter your API key.\n\n"
