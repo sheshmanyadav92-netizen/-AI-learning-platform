@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+pydantic[email]
+pyjwt
+slowapi
+cryptography
+reportlab
+langgraph
+httpx
+pytest
