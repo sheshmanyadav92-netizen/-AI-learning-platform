@@ -201,6 +201,10 @@ def test_mentor_chat_grounding():
     token = get_auth_token()
     headers = {"Authorization": f"Bearer {token}"}
 
+    # Keep this deterministic after the settings test saves a dummy Gemini key.
+    delete_key = client.delete("/settings/llm-key", headers=headers)
+    assert delete_key.status_code == 200
+
     chat_res = client.post("/mentor/chat", json={"message": "What is my career readiness score?"}, headers=headers)
     assert chat_res.status_code == 200
     resp_text = chat_res.json()["response"]
